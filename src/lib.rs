@@ -3,26 +3,24 @@ use pumpkin_plugin_api::{
     events::{EventData, EventHandler, EventPriority, PlayerJoinEvent, PlayerDeathEvent, PlayerLeaveEvent}, 
     register_plugin, text::TextComponent
 };
-use tracing::*;
+use tracing::info;
 
-struct JoinHandler;
-impl EventHandler<PlayerJoinEvent> for JoinHandler {
+struct Handler;
+impl EventHandler<PlayerJoinEvent> for Handler {
     fn handle<'a>(&'a self, _server: Server, mut event: EventData<PlayerJoinEvent>) -> EventData<PlayerJoinEvent> {
         event.join_message = TextComponent::text("");
         event
     }
 }
 
-struct LeaveHandler;
-impl EventHandler<PlayerLeaveEvent> for LeaveHandler {
+impl EventHandler<PlayerLeaveEvent> for Handler {
     fn handle<'a>(&'a self, _server: Server, mut event: EventData<PlayerLeaveEvent>) -> EventData<PlayerLeaveEvent> {
         event.leave_message = TextComponent::text("");
         event
     }
 }
 
-struct DeathHandler;
-impl EventHandler<PlayerDeathEvent> for DeathHandler {
+impl EventHandler<PlayerDeathEvent> for Handler {
     fn handle<'a>(&'a self, _server: Server, mut event: EventData<PlayerDeathEvent>) -> EventData<PlayerDeathEvent> {
         event.death_message = TextComponent::text("");
         event
@@ -48,9 +46,9 @@ impl Plugin for Main {
 
     fn on_load(&self, context: Context) -> Result<()> {
         info!("PumpkinNoMessages was successfuly loaded!");
-        context.register_event_handler(JoinHandler, EventPriority::Normal, true)?;
-        context.register_event_handler(LeaveHandler, EventPriority::Normal, true)?;
-        context.register_event_handler(DeathHandler, EventPriority::Normal, true)?;
+        context.register_event_handler::<PlayerJoinEvent, _>(Handler, EventPriority::Normal, true)?;
+        context.register_event_handler::<PlayerLeaveEvent, _>(Handler, EventPriority::Normal, true)?;
+        context.register_event_handler::<PlayerDeathEvent, _>(Handler, EventPriority::Normal, true)?;
         Ok(())
     }
 

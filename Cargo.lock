@@ -202,7 +202,7 @@ dependencies = [
 
 [[package]]
 name = "pumpkin-no-messages"
-version = "1.0.0"
+version = "1.0.1-beta"
 dependencies = [
  "pumpkin-plugin-api",
  "tracing",
